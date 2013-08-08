@@ -12,38 +12,9 @@ import pymongo
 import datetime
 import time
 
-simple_properties = [
-	'CONE_DIM', 
-	'N_VERTICES', 
-	'N_FACETS'
-	'FACET_WIDTH',
-	'LATTICE_VOLUME',
-	'N_INTERIOR_LATTICE_POINTS',
-	'N_BOUNDARY_LATTICE_POINTS',
-	'N_LATTICE_POINTS',
-	'ESSENTIALLY_GENERIC',
-	'GORENSTEIN',
-	'LATTICE_CODEGREE',
-	'LATTICE_DEGREE',
-	'REFLEXIVE',
-	'SMOOTH',
-	'VERY_AMPLE'
-]
+import db_properties
 
-vector_properties = [
-	'CENTROID',
-	'FACET_WIDTHS',
-	'F_VECTOR',
-	'H_STAR_VECTOR',
-	'EHRHART_POLYNOMIAL_COEFF'
-]
-
-matrix_properties = [
-	'VERTICES',
-	'FACETS'
-]
-
-def poly2dict(file, contrib, date): 
+def poly2dict(file, db_name, collection_name, contrib, date): 
 	start()		
 	tree = ElementTree.parse(file)
 	root = tree.getroot()
@@ -51,7 +22,6 @@ def poly2dict(file, contrib, date):
 	mt('parse')
 	
 	name = root.attrib['name']
-# 	type = root.attrib['type']
 	
 	start()
 	dict = {}
@@ -59,6 +29,12 @@ def poly2dict(file, contrib, date):
 	dict['_id'] = name
 	dict['date'] = date
 	dict['contributor'] = contrib
+
+	#type = root.attrib['type']
+
+	simple_properties = db_properties.simple_p(collection_name)
+	vector_properties = db_properties.vector_p(collection_name)
+	matrix_properties = db_properties.matrix_p(collection_name)
 
 	for p in root.findall('{http://www.math.tu-berlin.de/polymake/#3}property'):
 		key = p.attrib['name']
@@ -110,21 +86,21 @@ def make_json_string(dict):
 	
 	
 
-def add_to_db(obj, contrib):
+def add_to_db(db_name, collection, contrib, obj):
 	mongo = pymongo.MongoClient("localhost", 27017)
-	db = mongo.pm
-	db.lattice_polys.insert(poly2dict(obj, contrib, datetime.datetime.now().strftime("%Y-%m-%d")))
+	db = mongo[db_name]
+	db[collection].insert(poly2dict(obj, db_name, collection, contrib, datetime.datetime.now().strftime("%Y-%m-%d")))
 
 
-def add_list_to_db(objects, contrib):
+def add_list_to_db(db_name, collection, contrib, objects):
 	mongo = pymongo.MongoClient("localhost", 27017)
-	db = mongo.pm
+	db = mongo[db_name]
 	date = datetime.datetime.now().strftime("%Y-%m-%d")
 	docs = []
 	for obj in objects:
-		docs.append(poly2dict(obj, contrib, date))
+		docs.append(poly2dict(obj, db_name, collection, contrib, date))
 	start()
-	db.lattice_polys.insert(docs)
+	db[collection].insert(docs)
 	mt('db')
 
 def pt(s):
@@ -161,11 +137,16 @@ dicttime = 0
 dbtime = 0
 starting_time = time.time()
 
-contrib = "Andreas Paffenholz"
+#db_name = "LatticePolytopes"
+#collection = "SmoothReflexive"
+#contrib = "Andreas Paffenholz"
 date = datetime.datetime.now().strftime("%Y-%m-%d")
 
+db_name = sys.argv[1]
+collection = sys.argv[2]
+contrib = sys.argv[3]
 
-add_list_to_db(sys.argv[1:] , contrib)
+add_list_to_db(db_name, collection, contrib, sys.argv[4:])
 printtime()
 
 #poly2dict(sys.argv[1],contrib,date)
