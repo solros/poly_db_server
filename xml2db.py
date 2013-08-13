@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 # This script inserts data into a MongoDB database. It should be run on the polymake server (or potentially any other database server).
+# It should be run as xml2db.py database_name collection_name contributor FILES
 
 
 #from elementtree import ElementTree
@@ -29,8 +30,6 @@ def poly2dict(file, db_name, collection_name, contrib, date):
 	dict['_id'] = name
 	dict['date'] = date
 	dict['contributor'] = contrib
-
-	#type = root.attrib['type']
 
 	simple_properties = db_properties.simple_p(collection_name)
 	vector_properties = db_properties.vector_p(collection_name)

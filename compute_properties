@@ -1,0 +1,34 @@
+
+sub compute_properties_smooth_reflexive {
+	my $f = shift;
+	my $p = load($f);
+	$p->CONE_DIM; 
+	$p->N_VERTICES; 
+	$p->N_FACETS;
+	$p->FACET_WIDTH;
+	$p->LATTICE_VOLUME;
+	$p->N_INTERIOR_LATTICE_POINTS;
+	$p->N_BOUNDARY_LATTICE_POINTS;
+	$p->N_LATTICE_POINTS;
+	$p->ESSENTIALLY_GENERIC;
+	$p->GORENSTEIN;
+	$p->LATTICE_CODEGREE;
+	$p->LATTICE_DEGREE;
+	$p->REFLEXIVE;
+	$p->SMOOTH;
+	$p->VERY_AMPLE;
+	$p->CENTROID;
+	$p->FACET_WIDTHS;
+	$p->F_VECTOR;
+	$p->H_STAR_VECTOR;
+	$p->EHRHART_POLYNOMIAL_COEFF;
+	$p->VERTICES;
+	$p->FACETS;
+	
+	save($p, $f);
+}
+
+print @ARGV; print "\n";
+foreach (@ARGV) {
+	compute_properties_smooth_reflexive($_);
+}
