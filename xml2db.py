@@ -148,8 +148,6 @@ db_name = sys.argv[1]
 collection = sys.argv[2]
 contrib = sys.argv[3]
 
-print re.search(r"\.\d+D\.\d+", "fano.pnex.7d.0000").group(0)
-
 add_list_to_db(db_name, collection, contrib, sys.argv[4:])
 printtime()
 
