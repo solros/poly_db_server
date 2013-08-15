@@ -35,7 +35,7 @@ This file documents the steps I performed on the polymake server in order to get
 * Start Mongo Deamon (as polytrac):
 	mongod --config /etc/mongodb.conf
 
-* Insert data using xml2db.py. (This takes input a list of polymake files -- currently it prints processing time.) -- Currently everything goes into pm.lattice_polys.
+* Insert data using xml2db.py. (This takes as input a database_name, a collection_name, a contributor and a list of polymake files -- currently it prints processing time.) -- The data then goes into database_name.collection_name.
 
 * open up port 27017 
 	- on polymake server at TUD we have to edit Holger's firewall settings
@@ -43,7 +43,12 @@ This file documents the steps I performed on the polymake server in order to get
 * authentication
 	- useradmin with roles: userAdminAnyDatabase (manages users, MongoDB superuser)
 	- admin with roles: dbAdminAnyDatabase, readWriteAnyDatabase, clusterAdmin
-	- polymake with roles: read (user for everyone may only read pm database)
+	- polymake with roles: read (user for everyone, may only read certain databases, password is 'database')
+
+
+* If you start a new database make sure polymake user has read access.
+	user new_db
+	db.addUser({user:"polymake", userSource:"pm", roles: ["read"]})
 
 
 TODOs:
@@ -51,5 +56,6 @@ TODOs:
 * discuss database structure
 * preprocess polymake files (compute missing props)
 * indexing
+* store type in database docs?
 
 * web interface

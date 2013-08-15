@@ -17,6 +17,7 @@ def simple_p(collection):
 			'SMOOTH',
 			'VERY_AMPLE'
 		]
+		# indices: cone_dim, n_vertices, n_facets, lattice_volume, n_lattice_points, lattice_codegree, lattice_degree
 
 def vector_p(collection): 
 	if collection == 'SmoothReflexive':
