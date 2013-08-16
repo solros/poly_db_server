@@ -28,6 +28,42 @@ sub compute_properties_smooth_reflexive {
 	save($p, $f);
 }
 
+
+sub compute_properties_tom {
+	my $f = shift;
+	my $p = load($f);
+
+	$p->N_PHP;	
+	$p->RANK;
+	$p->DIM;
+	$p->N_VERTICES;
+	$p->N_TOPES;
+	$p->N_TYPES;
+	
+	$p->N_APICES;
+	
+	$p->GENERAL_POSITION;
+	
+	$p->BOUNDARY_AXIOM;
+	
+	$p->SURROUNDING_AXIOM;
+	
+	$p->COMPARABILITY_AXIOM;
+	
+	$p->ELIMINATION_AXIOM;
+	
+	$p->IS_TOM;
+	
+	$p->VERTICES;
+	
+	$p->TOPES;
+	
+	$p->APICES;
+
+	
+	save($p, $f);
+}
+
 print @ARGV; print "\n";
 foreach (@ARGV) {
 	compute_properties_smooth_reflexive($_);

@@ -23,20 +23,17 @@ def poly2dict(file, db_name, collection_name, contrib, date):
 
 	mt('parse')
 	
-	name = root.attrib['name']
-	id = "F" + re.search(r"\.\d+D\.\d+", name).group(0)
-	print id
-	
+		
 	start()
 	dict = {}
 	
-	dict['_id'] = id
 	dict['date'] = date
 	dict['contributor'] = contrib
 
 	simple_properties = db_properties.simple_p(collection_name)
 	vector_properties = db_properties.vector_p(collection_name)
 	matrix_properties = db_properties.matrix_p(collection_name)
+	mmatrix_properties = db_properties.mmatrix_p(collection_name)
 
 	for p in root.findall('{http://www.math.tu-berlin.de/polymake/#3}property'):
 		key = p.attrib['name']
@@ -49,6 +46,22 @@ def poly2dict(file, db_name, collection_name, contrib, date):
 		elif key in matrix_properties:
 			val = parse_matrix(p[0])
 			dict[key] = val
+		elif key in mmatrix_properties:
+			val = parse_mmatrix(p[0])
+			dict[key] = val
+
+
+	if collection_name == "SmoothReflexive":
+		name = root.attrib['name']
+		id = "F" + re.search(r"\.\d+D\.\d+", name).group(0)
+	elif collection_name == "TOM":
+		name = int(re.search(r"\d+",file).group(0))
+		id = "T." + repr(dict['RANK']) + '.' + repr(dict['N_PHP']) + '.' + repr(name).zfill(4)
+	print id
+
+	dict['_id'] = id
+
+
 	mt('dict')
 	return dict
 
@@ -75,6 +88,13 @@ def parse_matrix(p):
 	
 	return val
 	
+def parse_mmatrix(p):
+	val = []
+	for v in p:
+		val.append(parse_matrix(v))
+	
+	return val
+
 
 def poly2json(dict):
 	return make_json_string(dict)
@@ -152,4 +172,3 @@ add_list_to_db(db_name, collection, contrib, sys.argv[4:])
 printtime()
 
 
-#poly2dict(sys.argv[1],contrib,date)
