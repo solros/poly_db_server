@@ -1,0 +1,15 @@
+for i in {4..10}
+do
+x=fano-v8d-$i
+if [ -f $x/fano.pnew.8D.*9999.poly ]; then
+echo "directory $x exists"
+cd $x
+else
+wget http://polymake.org/polytopes/paffenholz/data/smooth-fano/d8/fano-v8d-$i.tgz;
+mkdir -p $x;
+cd $x 
+tar xvf ../$x.tgz;
+fi
+ls | xargs polymake --script /Volumes/Polaris/poly_database/apps/polytope/scripts/db_batch_insert LatticePolytopes SmoothReflexive "Andreas Paffenholz" 0 1 silke 22ntjyFYBZAc done
+cd ..
+done >> log1.log
