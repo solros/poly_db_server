@@ -1,0 +1,5 @@
+ERRORs
+
+ERROR: Corrupt application : missing main.rules file in .../polymake_new/apps/
+
+Double check that db and collection are correct
