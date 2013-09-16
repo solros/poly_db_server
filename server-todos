@@ -43,12 +43,18 @@ This file documents the steps I performed on the polymake server in order to get
 * authentication
 	- useradmin with roles: userAdminAnyDatabase (manages users, MongoDB superuser)
 	- admin with roles: dbAdminAnyDatabase, readWriteAnyDatabase, clusterAdmin
+	- silke with roles: readWriteAnyDatabase
 	- polymake with roles: read (user for everyone, may only read certain databases, password is 'database')
 
 
 * If you start a new database make sure polymake user has read access.
-	user new_db
-	db.addUser({user:"polymake", userSource:"pm", roles: ["read"]})
+	use new_db
+	db.addUser({user:"polymake", userSource:"admin", roles: ["read"]})
+
+
+* To stop the mongo daemon do:
+	use admin
+	db.shutdownServer()
 
 
 TODOs:
@@ -56,6 +62,5 @@ TODOs:
 * discuss database structure
 * preprocess polymake files (compute missing props)
 * indexing
-* store type in database docs?
 
 * web interface
